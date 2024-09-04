@@ -1,18 +1,18 @@
-## سمات التطبيق
+## App Themes
 
-حتى هذه النقطة، استخدمنا سمة فاتحة قياسية في التطبيق. يحتوي .NET MAUI على مفهوم موارد التطبيق القابلة لإعادة الاستخدام والموارد التي يمكنها التكيف تلقائيًا مع سمة الجهاز.
+Up to this point, we have used a standard light theme on the application. .NET MAUI has the concept of reusable Application Resources and resources that can automatically adapt to the theme of the device. 
 
-تتوفر هذه الوحدة أيضًا باللغات [الانجليزية](README.md) [الصينية (المبسطة)](README.zh-cn.md) و[الصينية (التقليدية)](README.zh-tw.md).
+This module is also available in [Chinese (Simplified)](README.zh-cn.md) & [Chinese (Traditional)](README.zh-tw.md).
 
-## الموارد القابلة لإعادة الاستخدام
+## Reusable Resources
 
-افتح ملف `App.xaml` ولاحظ وجود العديد من إدخالات `Color` و`Styles`. تم تكوينها مسبقًا لبعض الألوان والأنماط الأساسية التي استخدمناها في جميع أنحاء التطبيق. على سبيل المثال، حددنا لونًا فاتحًا للون الخلفية الرئيسي:
+Open the `App.xaml` file and notice that there are several `Color` entries and `Styles`. These were configured ahead of time for some basic colors and styles that we used throughout the application. For example, we have defined a light color for the main background color:
 
 ```xml
 <Color x:Key="LightBackground">#FAF9F8</Color>
 ```
 
-يمكن الرجوع إليه لاحقًا بواسطة أي عنصر واجهة مستخدم أو بواسطة نمط مشترك يمكن إعادة استخدامه. على سبيل المثال، ينطبق نمط `ButtonOutline` الخاص بنا على عنصر التحكم `Button` ويمنحه زاوية مستديرة، ويحدد الألوان للنص والحدود والخلفية:
+It can be referenced later by any UI element or by a shared style that can be reused. For example our `ButtonOutline` style applies to the `Button` control and gives it a rounded corner, sets colors for the text, border, and background:
 
 ```xml
 <Style x:Key="ButtonOutline" TargetType="Button">
@@ -25,31 +25,31 @@
 </Style>
 ```
 
-هذه طريقة رائعة لمشاركة التعليمات البرمجية عبر تطبيقك بالكامل.
+This is a great way to share code across your entire application. 
 
-## تغييرات السمة - السمة الفاتحة/الداكنة
+## Theme Changes - Light/Dark Theme
 
-ماذا يحدث عندما تريد الرد على قيام المستخدم بتغيير جهازه لاستخدام الوضع الداكن؟ حسنًا، يحتوي .NET MAUI على مفهوم `AppThemeBinding` للقيم. دعنا نأخذ خاصية `TextColor` في `Label`. يمكننا تعريف لونين جديدين لاستخدامهما:
+What happens when you want to respond to the user changing their device to use dark mode? Well, .NET MAUI has the concept of  an `AppThemeBinding` for values. Let's take a `Label`'s `TextColor` property. We can define two new colors to use:
 
 ```xml
 <Color x:Key="LabelText">Black</Color>
 <Color x:Key="LabelTextDark">White</Color>
 ```
 
-نريد أن يكون النص باللون الأسود عندما يكون لون الخلفية فاتحًا، وباللون الأبيض عندما يكون لون الخلفية داكنًا. عادةً، نضبط اللون على لون واحد مثل:
+We would want the text to be Black when the background color is light, and White when the background color is dark. Normally, we would set the color to a single color such as:
 
 ```xml
 <Label Text="Hello, world!" TextColor="{StaticResource LabelText}"/>
 ```
 
-ومع ذلك، لن يتكيف هذا مع تغييرات سمة التطبيق. يمكننا جعله `DynamicResource`، والاستماع إلى تغييرات سمة التطبيق، وتحديث قيمة `LabelText`، أو يمكننا استخدام `AppThemeBinding`:
+However, this will not adjust to app theme changes. We could make it a `DynamicResource`, listen for app theme changes, and update the `LabelText` value, or we can use an `AppThemeBinding`:
 
 ```xml
 <Label Text="Hello, world!" 
        TextColor="{AppThemeBinding Light={StaticResource LabelText}, Dark={StaticResource LabelTextDark}}"/>
 ```
 
-لدينا الآن خيار إنشاء نمط قابل لإعادة الاستخدام نشير إليه بالاسم أو نمط ينطبق على كل عنصر من نوع معين:
+We now have the option of creating a re-usable style that we reference by name or a style that applies to every element of a specific type:
 
 ```xml
 <Style TargetType="Label" x:Key="DefaultLabel">
@@ -62,7 +62,7 @@
        Style="{StaticResource DefaultLabel}"/>
 ```
 
-إذا تركنا `x:Key`، فسيتم تطبيقه تلقائيًا على كل `Label` في تطبيقنا.
+If we leave out the `x:Key`, then it will apply automatically to every `Label` in our app.
 
 ```xml
 <Style TargetType="Label">
@@ -70,11 +70,12 @@
 </Style>
 ```
 
-## تحديث الموارد
+## Update Resources
 
-الآن، دعنا نضيف دعم المظهر الفاتح/الداكن في جميع أنحاء تطبيقنا.
+Now, let's add in light/dark theme support throughout our entire application.
 
-1. دعنا نضيف بعض الألوان الجديدة التي سنستخدمها في "ResourceDictionary":
+
+1. Let's add some new colors we will use into our `ResourceDictionary`:
 
     ```xml
     <Color x:Key="CardBackground">White</Color>
@@ -84,7 +85,7 @@
     <Color x:Key="LabelTextDark">White</Color>
     ```
 
-1. دعنا نقوم بتحديث ألوان الخلفية على الصفحات من:
+1. Let's update background colors on pages from:
 
     ```xml
     <Style ApplyToDerivedTypes="True" TargetType="Page">
@@ -92,7 +93,7 @@
     </Style>
     ```
 
-    الي:
+    to:
 
     ```xml
     <Style ApplyToDerivedTypes="True" TargetType="Page">
@@ -101,13 +102,13 @@
     ```
 
 
-1. قم بتحديث قيمة `TextColor` الخاصة بـ `BaseLabel`:
+1. Update the `BaseLabel`'s `TextColor` value:
 
     ```xml
     <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource LabelText}, Dark={StaticResource LabelTextDark}}" />
     ```
 
-1. أضف "الخلفية" إلى "RefreshView" الخاص بنا
+1. Add the `Background` on our `RefreshView`
 
     ```xml
     <Style ApplyToDerivedTypes="True" TargetType="RefreshView">
@@ -117,20 +118,22 @@
     </Style>
     ```
 
-1. تحديث "الخلفية" في "ButtonOutline"
+1. Update the `Background` on the `ButtonOutline`
 
     ```xml
     <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource LightBackground}, Dark={StaticResource DarkBackground}}" />
     ```
 
-1. تحديث "الخلفية" في "CardView"
+1. Update the `Background` on the `CardView`
 
     ```xml
     <Setter Property="Background" Value="{AppThemeBinding Light={StaticResource CardBackground}, Dark={StaticResource CardBackgroundDark}}" />
     ```
 
-الآن، لنبدأ تشغيل التطبيق وتغيير السمة:
+Now, let's run the app and change the theme:
 
-![تغيير السمات](../Art/Themes.gif)
+![Changing themes](../Art/Themes.gif)
 
-لقد نجحت! تهانينا! لقد قمت ببناء أول تطبيق .NET MAUI الخاص بك، وحملت البيانات من الإنترنت، ونفذت الملاحة، وأضفت ميزات المنصة، وقمت بتصميم السمة للتطبيق!
+
+You did it! Congratulations! You built your first .NET MAUI application, loaded data from the internet, implemented navigation, added platform features, and themed the app!
+
